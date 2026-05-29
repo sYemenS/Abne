@@ -1,0 +1,6 @@
+{
+  "name": "بنيان",
+  "description": "منصة تمويل جماعي وإدارة مشاريع بنية تحتية ومجتمعية تفاعلية مع نظام ضمان مالي وعقوبات للمقاولين.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
