@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>لوحة تحكم إعمار وبنيان</title>
+    <style>
+      :root {
+        --bg: #f4f7fb;
+        --surface: #ffffff;
+        --surface-2: #eef4ff;
+        --text: #14213d;
+        --muted: #6b7280;
+        --accent: #1f6feb;
+        --accent-2: #0ea5a8;
+        --danger: #ef4444;
+        --warning: #f59e0b;
+        --success: #22c55e;
+        --border: #dbe4f0;
+        --shadow: 0 10px 25px rgba(20, 33, 61, 0.08);
+      }
+
+      body.dark {
+        --bg: #07111f;
+        --surface: #0f1b2e;
+        --surface-2: #14253d;
+        --text: #f3f7ff;
+        --muted: #98a7c0;
+        --accent: #4ea3ff;
+        --accent-2: #34d0d0;
+        --danger: #ff6b6b;
+        --warning: #ffbf47;
+        --success: #46d97a;
+        --border: #24344f;
+        --shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+      }
+
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, var(--bg), #e9f0ff);
+        color: var(--text);
+        transition: all 0.3s ease;
+      }
+
+      body.dark {
+        background: linear-gradient(135deg, var(--bg), #0b1628);
+      }
+
+      .app {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 24px;
+      }
+
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 24px;
+        border-radius: 20px;
+        background: var(--surface);
+        box-shadow: var(--shadow);
+        margin-bottom: 24px;
+      }
+
+      .brand h1 {
+        margin: 0;
+        font-size: 1.35rem;
+      }
+
+      .brand p {
+        margin: 4px 0 0;
+        color: var(--muted);
+      }
+
+      .toggle {
+        border: 0;
+        padding: 10px 14px;
+        border-radius: 999px;
+        background: var(--surface-2);
+        color: var(--accent);
+        cursor: pointer;
+        font-weight: 700;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+      }
+
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 18px;
+        box-shadow: var(--shadow);
+      }
+
+      .stat {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .stat .label {
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      .stat .value {
+        font-size: 1.35rem;
+        font-weight: 800;
+      }
+
+      .content-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 24px;
+      }
+
+      .panel {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 20px;
+        box-shadow: var(--shadow);
+        margin-bottom: 20px;
+      }
+
+      .panel h2 {
+        margin: 0 0 16px;
+        font-size: 1.1rem;
+      }
+
+      .report-list {
+        display: grid;
+        gap: 12px;
+      }
+
+      .report-item {
+        padding: 14px;
+        border-radius: 14px;
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+      }
+
+      .report-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 0.8rem;
+        font-weight: 700;
+      }
+
+      .badge.new { background: rgba(14,165,168,0.15); color: var(--accent-2); }
+      .badge.inprogress { background: rgba(245,158,11,0.16); color: var(--warning); }
+      .badge.done { background: rgba(34,197,94,0.16); color: var(--success); }
+
+      .geo {
+        color: var(--muted);
+        font-size: 0.9rem;
+        margin-top: 6px;
+      }
+
+      .mini-map {
+        height: 170px;
+        border-radius: 16px;
+        margin-top: 12px;
+        background: linear-gradient(135deg, rgba(31,111,235,0.2), rgba(14,165,168,0.2));
+        border: 1px dashed var(--accent);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .mini-map::before,
+      .mini-map::after {
+        content: "";
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(31,111,235,0.3);
+      }
+
+      .mini-map::before {
+        width: 120px; height: 120px; left: 20px; top: 20px;
+      }
+
+      .mini-map::after {
+        width: 80px; height: 80px; right: 25px; bottom: 18px; background: rgba(14,165,168,0.3);
+      }
+
+      .contractors ul,
+      .donations ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 10px;
+      }
+
+      .contractors li,
+      .donations li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 12px;
+        border-radius: 12px;
+        background: var(--surface-2);
+      }
+
+      .progress-bar {
+        width: 100%;
+        height: 8px;
+        background: #e5e7eb;
+        border-radius: 999px;
+        overflow: hidden;
+        margin-top: 8px;
+      }
+
+      .progress-bar > span {
+        display: block;
+        height: 100%;
+        background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      }
+
+      @media (max-width: 980px) {
+        .stats { grid-template-columns: 1fr 1fr; }
+        .content-grid { grid-template-columns: 1fr; }
+      }
+
+      @media (max-width: 640px) {
+        .app { padding: 14px; }
+        .topbar { flex-direction: column; gap: 12px; align-items: flex-start; }
+        .stats { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <header class="topbar">
+        <div class="brand">
+          <h1>لوحة تحكم إعمار وبنيان</h1>
+          <p>إدارة البلاغات، المقاولين، التبرعات والمشاريع</p>
+        </div>
+        <button class="toggle" onclick="document.body.classList.toggle('dark')">🌙 / ☀️</button>
+      </header>
+
+      <section class="stats">
+        <div class="card stat">
+          <div>
+            <div class="label">بلاغات جديدة</div>
+            <div class="value">128</div>
+          </div>
+          <div style="color: var(--accent); font-size: 1.4rem;">📢</div>
+        </div>
+        <div class="card stat">
+          <div>
+            <div class="label">المقاولون النشطون</div>
+            <div class="value">24</div>
+          </div>
+          <div style="color: var(--success); font-size: 1.4rem;">🏗️</div>
+        </div>
+        <div class="card stat">
+          <div>
+            <div class="label">إجمالي التبرعات</div>
+            <div class="value">3.2M</div>
+          </div>
+          <div style="color: var(--warning); font-size: 1.4rem;">💰</div>
+        </div>
+        <div class="card stat">
+          <div>
+            <div class="label">المشاريع قيد التنفيذ</div>
+            <div class="value">17</div>
+          </div>
+          <div style="color: var(--accent-2); font-size: 1.4rem;">🛣️</div>
+        </div>
+      </section>
+
+      <section class="content-grid">
+        <div>
+          <div class="panel">
+            <h2>بلاغات المواطنين</h2>
+            <div class="report-list">
+              <div class="report-item">
+                <div class="report-top">
+                  <strong>تشققات في جدار المدرسة</strong>
+                  <span class="badge new">جديد</span>
+                </div>
+                <div>المواطن: أحمد السعيد</div>
+                <div class="geo">📍 الرياض – حي الملقا – إحداثيات 24.7136, 46.6753</div>
+              </div>
+              <div class="report-item">
+                <div class="report-top">
+                  <strong>تسريب مياه في الشارع الرئيسي</strong>
+                  <span class="badge inprogress">قيد المتابعة</span>
+                </div>
+                <div>المواطن: سارة البلوشي</div>
+                <div class="geo">📍 جدة – حي الصفا – إحداثيات 21.4858, 39.1925</div>
+              </div>
+              <div class="report-item">
+                <div class="report-top">
+                  <strong>إزالة مخلفات من موقع البناء</strong>
+                  <span class="badge done">تم الحل</span>
+                </div>
+                <div>المواطن: خالد النعيمي</div>
+                <div class="geo">📍 الدمام – حي الفيصلية – إحداثيات 26.4207, 50.0888</div>
+              </div>
+            </div>
+            <div class="mini-map"></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="panel">
+            <h2>إدارة المقاولين</h2>
+            <div class="contractors">
+              <ul>
+                <li><span>شركة الرفعة للإنشاء</span><strong>94%</strong></li>
+                <li><span>مؤسسة النخبة</span><strong>81%</strong></li>
+                <li><span>أكاديمية البناء</span><strong>67%</strong></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="panel">
+            <h2>متابعة التبرعات</h2>
+            <div class="donations">
+              <ul>
+                <li><span>تبرعات عامة</span><strong>1.1M</strong></li>
+                <li><span>شركات داعمة</span><strong>900K</strong></li>
+                <li><span>أفراد مساهمون</span><strong>1.2M</strong></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="panel">
+            <h2>مشاريع البنية التحتية</h2>
+            <div>
+              <strong>مشروع طريق الملك سلمان</strong>
+              <div class="progress-bar"><span style="width: 72%"></span></div>
+            </div>
+            <div style="margin-top: 12px;">
+              <strong>مشروع محطة معالجة المياه</strong>
+              <div class="progress-bar"><span style="width: 58%"></span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>
